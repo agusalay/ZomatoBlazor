@@ -1,0 +1,29 @@
+﻿@inject IJSRuntime  js
+
+
+<div class="restaurant-container">
+    <GenericList List="Restaurants">
+        <ElementTemplate Context="restaurant">
+            <IndividualRestaurant Restaurant="restaurant"
+                                  DetailRestaurant="DetailRestaurant" />
+        </ElementTemplate>
+    </GenericList>
+</div>
+
+
+@code {
+
+ 
+    [Parameter] public List<Restaurant> Restaurants { get; set; }
+
+    private void DetailRestaurant(Restaurant restaurant)
+    {
+
+        //var confirmed = await js.Confirm($"Are you sure you want to delete{restaurant.name}?");
+
+        //if (confirmed)
+        //    Restaurants.Remove(restaurant);
+    }
+
+   
+}

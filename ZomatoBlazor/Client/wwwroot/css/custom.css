@@ -1,0 +1,28 @@
+﻿.individual-restaurant-container {
+    margin-right:2%;
+    margin-bottom:25px;
+    text-align:center;
+}
+
+.restaurant-thumb{
+    width: 250px;
+    height:250px;
+}
+
+.individual-restaurant-container p {
+    max-width: 225px;
+    height: 44px;
+    font-size: 15px;
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+.restaurant-container{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+}
+
+.filter-container {
+    padding-bottom: 15px;
+}

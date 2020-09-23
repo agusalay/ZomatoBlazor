@@ -1,0 +1,143 @@
+﻿@page "/"
+@inject ICollectionRepository collectionRepository
+@inject IRestaurantRepository restaurantRepository
+<div>
+    <h3>Restaurant</h3>
+
+    <div class="form-inline filter-container">
+        <div class="form-group mb-2">
+            <label for="title" class="sr-only">Name</label>
+            <input type="text" class="form-control" id="title" placeholder="Restaurant Name"
+                   @bind-value="name" @bind-value:event="oninput"
+                   @onkeypress="@((KeyboardEventArgs e) => TitleKeyPress(e))" />
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <select class="form-control" @onchange="getCollection" >
+                <option value="0">
+                    --Select a City--
+                </option>
+                @foreach (var city in Cities)
+                {
+                    <option value="@city.id">@city.name</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group mx-sm-3 mb-2">
+            <select class="form-control" @bind="selectedCollection">
+                <option value="0">
+                    --Select a Collection--
+                </option>
+                @foreach (var collection in Collections)
+                {
+                    <option value="@collection.collection_id">@collection.title</option>
+                }
+            </select>
+        </div>
+
+        <button type="button" class="btn btn-primary mb-2 mx-sm-3" @onclick="SearchForRestaurants">Search</button>
+        <button type="button" class="btn btn-danger mb-2" @onclick="Clear">Clear</button>
+    </div>
+
+    <RestaurantList Restaurants="restaurants" />
+</div>
+
+
+@code{
+
+    private List<Restaurant> restaurants = new List<Restaurant>();
+
+    string name = "";
+
+
+    string selectedCity;
+
+    //string _selectedCity = "0";
+    //string selectedCity
+    //{
+    //    get => _selectedCity;
+    //    set
+    //    {
+    //        _selectedCity = value;
+    //        Collections = _selectedCity.Equals("74") ? CollectionsJKT : _selectedCity.Equals("170") ? CollectionsBALI : CollectionsBDG;
+    //    }
+
+    //}
+    string selectedCollection = "0";
+
+    private List<CityDto> Cities = new List<CityDto>() {
+        new CityDto() { id = "74", name = "Jakarta"},
+        new CityDto(){id = "11052", name = "Bandung"},
+        new CityDto(){id = "170", name = "Bali"}
+    };
+
+    private List<CollectionDTO> Collections = new List<CollectionDTO>();
+
+    private List<CollectionDTO> CollectionsJKT = new List<CollectionDTO>();
+
+    private List<CollectionDTO> CollectionsBDG = new List<CollectionDTO>();
+
+    private List<CollectionDTO> CollectionsBALI = new List<CollectionDTO>();
+
+
+    protected  override void OnInitialized()
+    {
+        //var collJKTList = await collectionRepository.GetCollection("74");
+
+        //Collections = collJKTList.collections.AsEnumerable().Select(a => a.collection).ToList();
+
+        //var collBDGList = await collectionRepository.GetCollection("11052");
+
+        //CollectionsBDG = collBDGList.collections.AsEnumerable().Select(a => a.collection).ToList();
+
+        //var collBALIList = await collectionRepository.GetCollection("170");
+
+        //CollectionsBALI = collBALIList.collections.AsEnumerable().Select(a => a.collection).ToList();
+
+        //restaurants = repository.GetRestaurants();
+    }
+
+
+    private async Task getCollection(ChangeEventArgs e)
+    {
+        selectedCity = e.Value.ToString();
+
+        var collJKTList = await collectionRepository.GetCollection(selectedCity);
+        Collections = collJKTList.collections.AsEnumerable().Select(a => a.collection).ToList();
+
+    }
+
+    private async Task SearchForRestaurants()
+    {
+        var restaurantslist = await restaurantRepository.GetRestaurants(selectedCity, selectedCollection);
+
+        restaurants = restaurantslist.Restaurants.Select(a => a.Restaurant).Distinct().ToList();
+
+        Console.WriteLine($"title: {name}");
+        Console.WriteLine($"selectedGenre: {selectedCity}");
+    }
+
+    private async Task Clear()
+    {
+        var restaurantslist = await restaurantRepository.GetRestaurants(selectedCity, selectedCollection);
+
+        restaurants = restaurantslist.Restaurants.Select(a => a.Restaurant).Distinct().ToList();
+
+        name = "";
+        selectedCity = "0";
+        selectedCollection = "0";
+    }
+
+    private async Task TitleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            var restaurantslist = await restaurantRepository.GetRestaurants(selectedCity, selectedCollection);
+
+            restaurants =  restaurantslist.Restaurants.Select(a => a.Restaurant).Where(a => a.Name.Contains(name)).Distinct().ToList();
+            //SearchForMovies();
+        }
+    }
+}
+
+

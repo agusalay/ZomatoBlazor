@@ -1,0 +1,14 @@
+﻿<div class="individual-restaurant-container">
+    <a>
+        <img src="@Restaurant.featured_image" class="restaurant-thumb img-fluid rounded" alt="thumb" />
+    </a>
+    <p>@Restaurant.Name </p>
+    <div>
+        <a class="btn btn-block btn-warning">Detail</a>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Restaurant Restaurant { get; set; }
+    [Parameter] public EventCallback<Restaurant> DetailRestaurant { get; set; }
+}
