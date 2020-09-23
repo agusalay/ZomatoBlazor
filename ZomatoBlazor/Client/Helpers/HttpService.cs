@@ -11,7 +11,7 @@ namespace ZomatoBlazor.Client.Helpers
     public class HttpService : IHttpService
     {
         private readonly HttpClient httpClient;
-        private readonly string key = "114cbbee0f0e0e2a0337d80dcf1c4785";
+        private readonly string key = "";
 
         private JsonSerializerOptions defaultJsonSerializerOptions =>
             new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
