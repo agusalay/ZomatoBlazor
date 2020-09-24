@@ -1,0 +1,82 @@
+﻿@page "/restaurant/{restaurantid}"
+@inject IRestaurantRepository restaurantRepo
+@using GoogleMapsComponents
+@using GoogleMapsComponents.Maps
+@inject IJSRuntime  js
+
+@if (restaurantDetail is null)
+{
+    <text>Loading..</text>
+
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-6 justify-content-center">
+                @if (!string.IsNullOrEmpty(@restaurantDetail.featured_image))
+                {
+                    <img src="@restaurantDetail.featured_image" class="rounded img-fluid" />
+                }
+                else
+                {
+                    <img src="/defaultIMG.png" class="restaurant-thumb img-fluid rounded d-block m-auto" alt="thumb" />
+                }
+            </div>
+            <div class="col-6">
+                <h5>@restaurantDetail.cuisines</h5>
+                <h2>@restaurantDetail.name <span class="badge badge-primary">@restaurantDetail.user_rating.rating_text @restaurantDetail.user_rating.aggregate_rating/5</span></h2>
+                <h5>Average cost for two : RP.  @restaurantDetail.average_cost_for_two.ToString("#,##0.00") </h5>
+                <h6>@restaurantDetail.timings</h6>
+                <h5>@restaurantDetail.location.City</h5>
+                <h5>@restaurantDetail.location.Address</h5>
+                <h6>
+                    <span>
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-telephone-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M2.267.98a1.636 1.636 0 0 1 2.448.152l1.681 2.162c.309.396.418.913.296 1.4l-.513 2.053a.636.636 0 0 0 .167.604L8.65 9.654a.636.636 0 0 0 .604.167l2.052-.513a1.636 1.636 0 0 1 1.401.296l2.162 1.681c.777.604.849 1.753.153 2.448l-.97.97c-.693.693-1.73.998-2.697.658a17.47 17.47 0 0 1-6.571-4.144A17.47 17.47 0 0 1 .639 4.646c-.34-.967-.035-2.004.658-2.698l.97-.969z" />
+                        </svg>
+                    </span> @restaurantDetail.phone_numbers
+                </h6>
+                <row>
+                    <button class="btn btn-primary" @onclick="openZomato">Visit Zomato</button>
+                    <a href="/" class="btn btn-warning">Back</a>
+                </row>
+            </div>
+        </div>
+    </div>
+}
+
+@*<GoogleMap @ref="@map1" Id="map1" Options="@mapOptions"></GoogleMap>*@
+
+@code {
+
+    [Parameter] public string restaurantid { get; set; }
+    RestaurantDetail restaurantDetail;
+
+    //private GoogleMap map1;
+    //private MapOptions mapOptions;
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        restaurantDetail = await restaurantRepo.GetRestaurant(restaurantid);
+
+        //mapOptions = new MapOptions()
+        //{
+        //    Zoom = 13,
+        //    Center = new LatLngLiteral()
+        //    {
+        //        Lat = 13.505892,
+        //        Lng = 100.8162
+        //    },
+        //    MapTypeId = MapTypeId.Roadmap
+        //};
+    }
+
+    private async Task openZomato()
+    {
+        string url = restaurantDetail.url;
+
+       var result = await js.OpenNewTab(url);
+    }
+}

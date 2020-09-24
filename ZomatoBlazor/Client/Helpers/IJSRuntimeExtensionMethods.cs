@@ -12,5 +12,10 @@ namespace ZomatoBlazor.Client.Helpers
         {
             return await js.InvokeAsync<bool>("confirm", message);
         }
+
+        public static async ValueTask<string> OpenNewTab(this IJSRuntime js, string url)
+        {
+            return await js.InvokeAsync<string>("open", url, "_blank");
+        }
     }
 }

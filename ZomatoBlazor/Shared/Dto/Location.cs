@@ -13,7 +13,7 @@ namespace ZomatoBlazor.Shared.Dto
         [JsonProperty("city")]
         public string City { get; set; }
 
-        [JsonProperty("locality_verbose")]
-        public string LocalityVerbose { get; set; }
+        //[JsonProperty("locality_verbose")]
+        //public string LocalityVerbose { get; set; }
     }
 }

@@ -8,6 +8,7 @@ namespace ZomatoBlazor.Client.Repository
 {
     public interface IRestaurantRepository
     {
+        Task<RestaurantDetail> GetRestaurant(string id);
         Task<RestaurantListDto> GetRestaurants(string cityId, string collection_id);
     }
 }

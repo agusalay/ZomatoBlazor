@@ -1,10 +1,18 @@
 ﻿<div class="individual-restaurant-container">
-    <a>
-        <img src="@Restaurant.featured_image" class="restaurant-thumb img-fluid rounded" alt="thumb" />
+    <a href="/restaurant/@Restaurant.ID">
+        @if (!string.IsNullOrEmpty(@Restaurant.featured_image))
+        {
+            <img src="@Restaurant.featured_image" class="restaurant-thumb img-fluid rounded" alt="thumb" />
+        }
+        else
+        {
+            <img src="/defaultIMG.png" class="restaurant-thumb img-fluid rounded" alt="thumb" />
+        }
+
     </a>
     <p>@Restaurant.Name </p>
     <div>
-        <a class="btn btn-block btn-warning">Detail</a>
+        <a class="btn btn-block btn-warning" href="/restaurant/@Restaurant.ID">Detail</a>
     </div>
 </div>
 
