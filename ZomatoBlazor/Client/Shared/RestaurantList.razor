@@ -5,7 +5,7 @@
     <GenericList List="Restaurants">
         <ElementTemplate Context="restaurant">
             <IndividualRestaurant Restaurant="restaurant"
-                                  DetailRestaurant="DetailRestaurant" />
+                                  DetailRestaurant="DetailRestaurant" sourceurl="@sourceurl" />
         </ElementTemplate>
     </GenericList>
 </div>
@@ -13,8 +13,10 @@
 
 @code {
 
- 
+
     [Parameter] public List<Restaurant> Restaurants { get; set; }
+
+    [Parameter] public string sourceurl { get; set; }
 
     private void DetailRestaurant(Restaurant restaurant)
     {
@@ -25,5 +27,5 @@
         //    Restaurants.Remove(restaurant);
     }
 
-   
+
 }

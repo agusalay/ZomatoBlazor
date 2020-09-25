@@ -1,4 +1,6 @@
-﻿<div class="individual-restaurant-container">
+﻿@inject NavigationManager UriHelper
+
+<div class="individual-restaurant-container">
     <a href="/restaurant/@Restaurant.ID">
         @if (!string.IsNullOrEmpty(@Restaurant.featured_image))
         {
@@ -12,11 +14,21 @@
     </a>
     <p>@Restaurant.Name </p>
     <div>
-        <a class="btn btn-block btn-warning" href="/restaurant/@Restaurant.ID">Detail</a>
+        <button class="btn btn-block btn-warning" @onclick="Navigate">Detail</button>
+
     </div>
 </div>
 
 @code {
     [Parameter] public Restaurant Restaurant { get; set; }
     [Parameter] public EventCallback<Restaurant> DetailRestaurant { get; set; }
+    [Parameter] public string sourceurl { get; set; }
+
+    void Navigate()
+    {
+        if (string.IsNullOrEmpty(sourceurl))
+            UriHelper.NavigateTo($"/restaurant/{Restaurant.ID}");
+        else
+            UriHelper.NavigateTo($"/restaurant/{sourceurl}/{Restaurant.ID}");
+    }
 }

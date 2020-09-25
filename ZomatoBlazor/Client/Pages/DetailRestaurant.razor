@@ -1,8 +1,11 @@
 ﻿@page "/restaurant/{restaurantid}"
+@page "/restaurant/nearby/{restaurantid}"
 @inject IRestaurantRepository restaurantRepo
 @using GoogleMapsComponents
 @using GoogleMapsComponents.Maps
 @inject IJSRuntime  js
+@inject NavigationManager UriHelper
+
 
 @if (restaurantDetail is null)
 {
@@ -39,7 +42,7 @@ else
                 </h6>
                 <row>
                     <button class="btn btn-primary" @onclick="openZomato">Visit Zomato</button>
-                    <a href="/" class="btn btn-warning">Back</a>
+                    <button class="btn btn-warning" @onclick="Navigate">Back</button>
                 </row>
             </div>
         </div>
@@ -77,6 +80,14 @@ else
     {
         string url = restaurantDetail.url;
 
-       var result = await js.OpenNewTab(url);
+        var result = await js.OpenNewTab(url);
+    }
+
+    void Navigate()
+    {
+        if(UriHelper.Uri.Contains("nearby"))
+            UriHelper.NavigateTo("/nearbyrestaurant");
+        else
+            UriHelper.NavigateTo("/");
     }
 }

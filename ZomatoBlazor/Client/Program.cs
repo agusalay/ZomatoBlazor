@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ZomatoBlazor.Client.Helpers;
 using ZomatoBlazor.Client.Repository;
+using AspNetMonsters.Blazor.Geolocation;
 
 namespace ZomatoBlazor.Client
 {
@@ -29,6 +30,8 @@ namespace ZomatoBlazor.Client
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
+
+            services.AddSingleton<LocationService>();
 
             services.AddTransient<IHttpService, HttpService>();
            

@@ -1,0 +1,63 @@
+﻿@page "/nearbyrestaurant"
+@inject IRestaurantRepository restaurantRepository
+@using AspNetMonsters.Blazor.Geolocation
+@inject LocationService  LocationService
+
+<h3>You are here</h3>
+<div>
+    City : @city <br />
+    Lat: @location?.Latitude <br />
+    Long: @location?.Longitude <br />
+    Accuracy: @location?.Accuracy <br />
+</div>
+
+<RestaurantList Restaurants="restaurants" sourceurl="nearby" />
+
+<Pagination CurrentPage="@paginationDTO.Page" TotalAmountPages="totalAmountPages" Radius="2"
+            SelectedPage="SelectedPage" />
+
+@code {
+    PaginationDTO paginationDTO = new PaginationDTO() { RecordsPerPage = 5 };
+
+    private int totalAmountPages;
+
+    private List<Restaurant> restaurants;
+
+    AspNetMonsters.Blazor.Geolocation.Location location;
+
+    private string city;
+
+    protected override async Task OnInitializedAsync()
+    {
+        location = await LocationService.GetLocationAsync();
+
+        if(location != null)
+        {
+
+            await LoadRestaurant();
+        }
+    }
+
+    private async Task LoadRestaurant()
+    {
+        var restaurantslist = await restaurantRepository.GetNearByRestaurants(location?.Latitude, location?.Longitude, paginationDTO.Page, paginationDTO.RecordsPerPage);
+
+        restaurants = restaurantslist.Restaurants.Select(a => a.Restaurant).Distinct().ToList();
+
+        city = restaurants.FirstOrDefault().Location.City;
+
+        totalAmountPages = restaurantslist.results_found >= paginationDTO.MaxResult ? (paginationDTO.MaxResult / paginationDTO.RecordsPerPage) : (restaurantslist.results_found / paginationDTO.RecordsPerPage);
+
+        Console.WriteLine(restaurantslist.results_found);
+        Console.WriteLine(paginationDTO.MaxResult);
+
+        Console.WriteLine(paginationDTO.RecordsPerPage);
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        paginationDTO.Page = page;
+        await LoadRestaurant();
+    }
+
+}

@@ -8,10 +8,10 @@ namespace ZomatoBlazor.Shared.Dto
     public class RestaurantListDto
     {
         [JsonProperty("results_found")]
-        public int ResultsFound { get; set; }
+        public int results_found { get; set; }
 
         [JsonProperty("results_shown")]
-        public int ResultsShown { get; set; }
+        public int results_shown { get; set; }
 
         [JsonProperty("restaurants")]
         public RestaurantRecord[] Restaurants { get; set; }

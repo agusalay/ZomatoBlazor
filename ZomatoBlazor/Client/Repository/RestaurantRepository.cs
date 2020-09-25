@@ -31,6 +31,20 @@ namespace ZomatoBlazor.Client.Repository
 
         }
 
+        public async Task<RestaurantListDto> GetNearByRestaurants(decimal? lat, decimal? lon, int page, int recordsperpage)
+        {
+            string param = $"search?start={page}&count={recordsperpage}&lat={lat}&lon={lon}&radius=1000&sort=rating";
+
+            var response = await httpService.Get<RestaurantListDto>(url + param);
+
+            if (!response.Success)
+            {
+                throw new ApplicationException(await response.GetBody());
+            }
+
+            return response.Response;
+        }
+
         public async Task<RestaurantDetail> GetRestaurant(string id)
         {
             string param = $"restaurant?res_id={id}";
